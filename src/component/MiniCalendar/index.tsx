@@ -1,5 +1,5 @@
 import './index.css';
-import React, {useImperativeHandle, useState} from 'react';
+import React, {useState} from 'react';
 
 // 组件传入参数
 interface CalendarProps{
@@ -7,7 +7,7 @@ interface CalendarProps{
     onChange?: (date: Date) => void,
 }
 
-const Calendar: React.FC<CalendarProps> = (props,) => {
+const MiniCalendar: React.FC<CalendarProps> = (props,) => {
     // 接受组件外部传入的参数
     const {value = new Date(), onChange} = props;
 
@@ -79,4 +79,4 @@ const Calendar: React.FC<CalendarProps> = (props,) => {
     );
 }
 
-export default Calendar;
+export default MiniCalendar;
