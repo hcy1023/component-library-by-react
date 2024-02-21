@@ -1,9 +1,14 @@
 import './index.scss'
 import calendar, {CalendarProps} from "./index";
 import {Dayjs} from "dayjs";
+import LocaleContext from "./LocaleContext";
+import allLocales from "./locale";
+import {useContext} from "react";
+import cs from 'classnames'
 
 interface MonthCalendarProps extends CalendarProps {
-
+    selectHandler?: (date: Dayjs) => void,
+    curMonth: Dayjs
 }
 
 function getAllDays(date: Dayjs) {
@@ -34,7 +39,13 @@ function getAllDays(date: Dayjs) {
 }
 
 // 生成用于渲染的日期
-function renderDays(days: Array<{date: Dayjs, currentMonth: boolean}>) {
+function renderDays(
+    days: Array<{date: Dayjs, currentMonth: boolean}>,
+    dateRender: MonthCalendarProps['dateRender'],
+    dateInnerContent: MonthCalendarProps['dateInnerContent'],
+    value: Dayjs,
+    selectHandle: MonthCalendarProps['selectHandler']
+    ) {
     const rows = [];
     for (let i = 0; i < 6; i++) {
         const row = [];
@@ -43,7 +54,21 @@ function renderDays(days: Array<{date: Dayjs, currentMonth: boolean}>) {
             // 多选择器时注意字符串拼接时的空格
             row[j] = <div className={
                 "calendar-month-body-cell " + (item.currentMonth ? 'calendar-month-body-cell-current' : '')
-            }>{item.date.date()}</div>
+            }
+                onClick={() => selectHandle?.(item.date)}
+            >{
+                dateRender ? dateRender(item.date) : (
+                    <div className="calendar-month-body-cell-date">
+                        <div className={
+                            cs("calendar-month-body-cell-date-value",
+                                value.format('YYYY-MM-DD') === item.date.format('YYYY-MM-DD')
+                                    ? "calendar-month-body-cell-date-selected" : ""
+                                )
+                        }>{item.date.date()}</div>
+                        <div className="calendar-month-body-cell-date-content">{dateInnerContent?.(item.date)}</div>
+                    </div>
+                )
+            }</div>
         }
         rows.push(row);
     }
@@ -51,16 +76,24 @@ function renderDays(days: Array<{date: Dayjs, currentMonth: boolean}>) {
 }
 
 function MonthCalendar(props: MonthCalendarProps) {
-    const weekList = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
-    const allDays = getAllDays(props.value);
+    // 接收参数
+    const { value, curMonth, dateRender, dateInnerContent, selectHandler } = props;
+
+    // 获取上下文
+    const localeContext = useContext(LocaleContext);
+
+    const CalendarLocale = allLocales[localeContext.locale];
+
+    const weekList = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    const allDays = getAllDays(curMonth);
 
     return <div className="calendar-month">
         <div className="calendar-month-week-list">
             {weekList.map((week) =>
-                <div className="calendar-month-week-list-item" key={week}>{week}</div>
+                <div className="calendar-month-week-list-item" key={week}>{CalendarLocale.week[week]}</div>
             )}
         </div>
-        <div className="calendar-month-body">{renderDays(allDays)}</div>
+        <div className="calendar-month-body">{renderDays(allDays, dateRender, dateInnerContent, value, selectHandler)}</div>
     </div>
 }
 

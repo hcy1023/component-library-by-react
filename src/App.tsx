@@ -10,7 +10,9 @@ function App() {
         {/*<MiniCalendar value={new Date('1999-10-23')} onChange={(date: Date) => {*/}
         {/*    alert(date.toLocaleDateString())*/}
         {/*}}/>*/}
-        <Calendar value={dayjs('2024-02-20')}/>
+        <Calendar value={dayjs('2024-02-21')} locale="en-US" onChange={(date) => {
+            alert(date.format('YYYY-MM-DD'));
+        }}/>
     </div>
   );
 }
