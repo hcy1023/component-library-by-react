@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ctrl/tinycolor": "^4.0.3",
     "@storybook/jest": "^0.2.3",
     "@storybook/testing-library": "^0.2.2",
     "@testing-library/jest-dom": "^5.17.0",
