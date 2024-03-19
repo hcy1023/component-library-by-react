@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { TransformOffset } from "./Transform";
-
+import { Color } from "./color";
 // 兼容MouseEvent 和 React.MouseEvent事件
 type EventType = | MouseEvent | React.MouseEvent<Element, MouseEvent>
 
@@ -8,17 +8,28 @@ type EventHandle = (e: EventType) => void;
 
 interface useColorDragProps {
     offset?: TransformOffset,
+    color: Color,
     containerRef: React.RefObject<HTMLDivElement>,
     targetRef: React.RefObject<HTMLDivElement>,
-    direction: 'x' | 'y',
-    onDragChange?: (offset: TransformOffset) => void
+    direction?: 'x' | 'y',
+    onDragChange?: (offset: TransformOffset) => void,
+    calculate?: () => TransformOffset
 }
 
 function useColorDrag(props: useColorDragProps): [TransformOffset, EventHandle] {
-    const { offset, targetRef, containerRef, direction, onDragChange} = props;
+    const { offset, color, targetRef, containerRef, direction, onDragChange, calculate} = props;
 
     const [offsetValue, setOffsetValue] = useState(offset || { x: 0, y: 0 });
     const dragRef = useRef({ flag: false }); // 标记是否在拖动中
+
+    useEffect(() => {
+        if (!dragRef.current.flag) {
+            const calcOffset = calculate?.();
+            if (calcOffset) {
+                setOffsetValue(calcOffset);
+            }
+        }
+    }, [color]);
 
     // 组件初始化的时候去除之前的事件监听
     useEffect(() => {
