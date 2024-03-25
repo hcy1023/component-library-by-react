@@ -7,6 +7,8 @@ import dayjs from "dayjs";
 import {IconAdd} from "./component/Icon/icons/IconAdd";
 import {IconEmail} from "./component/Icon/icons/IconEmail";
 import {createFromIconfont} from "./component/Icon/createFrontIconfont";
+import Space from "./component/Space";
+import {ConfigProvider} from "./component/Space/ConfigProvider";
 
 const IconFont = createFromIconfont('//at.alicdn.com/t/c/font_4479488_6s9wokfcww4.js')
 
@@ -20,13 +22,25 @@ function App() {
         {/*    alert(date.format('YYYY-MM-DD'));*/}
         {/*}}/>*/}
         {/*<ColorPickerPanel value="rgb(166 57 57)"></ColorPickerPanel>*/}
-        <div style={{padding: '50px'}}>
-            <IconAdd size='40px'></IconAdd>
-            <IconEmail spin></IconEmail>
-            <IconEmail style={{color: 'blue', fontSize: '50px'}}></IconEmail>
-            <IconFont type="icon-xihuan" size="40px"></IconFont>
-            <IconFont type="icon-qianshuxieyi" fill="blue" size="40px"></IconFont>
-        </div>
+        {/*<div style={{padding: '50px'}}>*/}
+        {/*    <IconAdd size='40px'></IconAdd>*/}
+        {/*    <IconEmail spin></IconEmail>*/}
+        {/*    <IconEmail style={{color: 'blue', fontSize: '50px'}}></IconEmail>*/}
+        {/*    <IconFont type="icon-xihuan" size="40px"></IconFont>*/}
+        {/*    <IconFont type="icon-qianshuxieyi" fill="blue" size="40px"></IconFont>*/}
+        {/*</div>*/}
+        <ConfigProvider space={{ size: 20 }}>
+            <Space direction="horizontal">
+                <div className="box"></div>
+                <div className="box"></div>
+                <div className="box"></div>
+            </Space>
+            <Space direction="vertical">
+                <div className="box"></div>
+                <div className="box"></div>
+                <div className="box"></div>
+            </Space>
+        </ConfigProvider>
     </div>
   );
 }
